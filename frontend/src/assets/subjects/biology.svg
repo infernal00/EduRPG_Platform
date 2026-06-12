@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none" role="img" aria-label="Biology">
+  <title>Biology</title>
+  <!-- Leaf shape background glow -->
+  <ellipse cx="32" cy="32" rx="22" ry="22" fill="#1D9E75" opacity="0.15"/>
+  <!-- DNA double helix - left strand -->
+  <path d="M22 10 C26 16, 26 22, 22 28 C18 34, 18 40, 22 46 C26 52, 26 54, 22 54"
+        stroke="#1D9E75" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <!-- DNA double helix - right strand -->
+  <path d="M42 10 C38 16, 38 22, 42 28 C46 34, 46 40, 42 46 C38 52, 38 54, 42 54"
+        stroke="#5DCAA5" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+  <!-- Rungs -->
+  <line x1="22" y1="15" x2="42" y2="15" stroke="#9FE1CB" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="19" y1="22" x2="45" y2="22" stroke="#9FE1CB" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="22" y1="29" x2="42" y2="29" stroke="#9FE1CB" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="19" y1="36" x2="45" y2="36" stroke="#9FE1CB" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="22" y1="43" x2="42" y2="43" stroke="#9FE1CB" stroke-width="1.8" stroke-linecap="round"/>
+  <line x1="19" y1="50" x2="45" y2="50" stroke="#9FE1CB" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- Node dots on strands -->
+  <circle cx="22" cy="15" r="2.2" fill="#1D9E75"/>
+  <circle cx="42" cy="15" r="2.2" fill="#5DCAA5"/>
+  <circle cx="19" cy="22" r="2.2" fill="#1D9E75"/>
+  <circle cx="45" cy="22" r="2.2" fill="#5DCAA5"/>
+  <circle cx="22" cy="29" r="2.2" fill="#1D9E75"/>
+  <circle cx="42" cy="29" r="2.2" fill="#5DCAA5"/>
+  <circle cx="19" cy="36" r="2.2" fill="#1D9E75"/>
+  <circle cx="45" cy="36" r="2.2" fill="#5DCAA5"/>
+  <circle cx="22" cy="43" r="2.2" fill="#1D9E75"/>
+  <circle cx="42" cy="43" r="2.2" fill="#5DCAA5"/>
+  <!-- Small leaf accent -->
+  <path d="M32 5 C36 8, 38 13, 32 15 C26 13, 28 8, 32 5Z" fill="#1D9E75" opacity="0.8"/>
+</svg>
