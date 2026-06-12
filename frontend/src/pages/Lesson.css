@@ -88,3 +88,12 @@
   font-weight: 800;
   cursor: pointer;
 }
+.complete-result {
+  margin-top: 20px;
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  color: #bbf7d0;
+  font-weight: 700;
+}

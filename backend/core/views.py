@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from django.shortcuts import get_object_or_404
-from .models import Subject, Lesson
+
+from .models import Subject, Lesson, UserProfile, LessonProgress
 from .serializers import SubjectSerializer, LessonSerializer
 
 @api_view(["GET"])
@@ -77,3 +80,56 @@ def lesson_detail(request, pk):
     )
     serializer = LessonSerializer(lesson)
     return Response(serializer.data)
+
+@api_view(["POST"])
+@permission_classes([AllowAny])
+def complete_lesson(request, pk):
+    lesson = get_object_or_404(Lesson, pk=pk, is_active=True)
+
+    User = get_user_model()
+    user, _ = User.objects.get_or_create(
+        username="demo",
+        defaults={"email": "demo@example.com"},
+    )
+
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+
+    progress, created = LessonProgress.objects.get_or_create(
+        user=user,
+        lesson=lesson,
+        defaults={"is_completed": False},
+    )
+
+    if progress.is_completed:
+        return Response({
+            "status": "already_completed",
+            "message": "Lesson was already completed.",
+            "lesson_id": lesson.id,
+            "lesson_title": lesson.title,
+            "xp_gained": 0,
+            "coins_gained": 0,
+            "profile": {
+                "username": user.username,
+                "level": profile.level,
+                "xp": profile.xp,
+                "coins": profile.coins,
+            },
+        })
+
+    progress.complete()
+    profile.add_rewards(lesson.xp_reward, lesson.coins_reward)
+
+    return Response({
+        "status": "completed",
+        "message": "Lesson completed successfully.",
+        "lesson_id": lesson.id,
+        "lesson_title": lesson.title,
+        "xp_gained": lesson.xp_reward,
+        "coins_gained": lesson.coins_reward,
+        "profile": {
+            "username": user.username,
+            "level": profile.level,
+            "xp": profile.xp,
+            "coins": profile.coins,
+        },
+    })

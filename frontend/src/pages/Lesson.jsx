@@ -9,6 +9,9 @@ export default function Lesson() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const [completeResult, setCompleteResult] = useState(null);
+  const [completing, setCompleting] = useState(false);
+
   useEffect(() => {
     async function loadLesson() {
       try {
@@ -29,6 +32,34 @@ export default function Lesson() {
 
     loadLesson();
   }, [id]);
+
+  async function handleCompleteLesson() {
+    setCompleting(true);
+    setCompleteResult(null);
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/lessons/${id}/complete/`,
+        {
+          method: "POST",
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to complete lesson");
+      }
+
+      const data = await response.json();
+      setCompleteResult(data);
+    } catch {
+      setCompleteResult({
+        status: "error",
+        message: "Не удалось завершить урок. Проверь backend.",
+      });
+    } finally {
+      setCompleting(false);
+    }
+  }
 
   if (loading) {
     return (
@@ -80,9 +111,36 @@ export default function Lesson() {
           )}
         </div>
 
-        <button className="complete-button">
-          Завершить урок
+        <button
+          className="complete-button"
+          onClick={handleCompleteLesson}
+          disabled={completing}
+        >
+          {completing ? "Завершаем..." : "Завершить урок"}
         </button>
+
+        {completeResult && (
+          <div className="complete-result">
+            {completeResult.status === "completed" ? (
+              <p>
+                Урок завершён! +{completeResult.xp_gained} XP и +
+                {completeResult.coins_gained} coins.
+              </p>
+            ) : completeResult.status === "already_completed" ? (
+              <p>Этот урок уже был завершён. Награда уже получена.</p>
+            ) : (
+              <p>{completeResult.message}</p>
+            )}
+
+            {completeResult.profile && (
+              <p>
+                Level: {completeResult.profile.level} | XP:{" "}
+                {completeResult.profile.xp} | Coins:{" "}
+                {completeResult.profile.coins}
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ from .views import (
     subjects_list,
     lessons_list,
     lesson_detail,
+    complete_lesson,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("subjects/", subjects_list, name="subjects_list"),
     path("lessons/", lessons_list, name="lessons_list"),
     path("lessons/<int:pk>/", lesson_detail, name="lesson_detail"),
+    path("lessons/<int:pk>/complete/", complete_lesson, name="complete_lesson"),
 ]
