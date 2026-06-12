@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import biologyIcon from "../assets/subjects/biology.svg";
 import defaultIcon from "../assets/subjects/default.svg";
@@ -114,7 +115,13 @@ export default function Map() {
                   </div>
                 )}
 
-                <button>Войти</button>
+                {topics[0]?.lessons?.[0] ? (
+                  <Link className="map-enter-button" to={`/lessons/${topics[0].lessons[0].id}`}>
+                    Войти
+                  </Link>
+                  ) : (
+                  <button disabled>Нет уроков</button>
+                  )}
               </div>
             );
           })}
