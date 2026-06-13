@@ -1,6 +1,5 @@
 from rest_framework import serializers
-
-from .models import Subject, Topic, Lesson
+from .models import Subject, Topic, Lesson, UserProfile
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -54,4 +53,17 @@ class SubjectSerializer(serializers.ModelSerializer):
             "is_active",
             "created_at",
             "topics",
+        ]
+
+class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source="user.username", read_only=True)
+
+    class Meta:
+        model = UserProfile
+        fields = [
+            "username",
+            "level",
+            "xp",
+            "coins",
+            "updated_at",
         ]

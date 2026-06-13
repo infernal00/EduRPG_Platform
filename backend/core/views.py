@@ -6,7 +6,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
 from .models import Subject, Lesson, UserProfile, LessonProgress
-from .serializers import SubjectSerializer, LessonSerializer
+from .serializers import SubjectSerializer, LessonSerializer, ProfileSerializer
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
@@ -133,3 +133,17 @@ def complete_lesson(request, pk):
             "coins": profile.coins,
         },
     })
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def profile_detail(request):
+    User = get_user_model()
+    user, _ = User.objects.get_or_create(
+        username="demo",
+        defaults={"email": "demo@example.com"},
+    )
+
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    serializer = ProfileSerializer(profile)
+
+    return Response(serializer.data)
