@@ -1,0 +1,211 @@
+.profile-page {
+  min-height: calc(100vh - 84px);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(124, 58, 237, 0.18), transparent 30%),
+    radial-gradient(circle at 100% 14%, rgba(34, 211, 238, 0.12), transparent 26%),
+    linear-gradient(135deg, #070b1f, #11102a 58%, #0b1024);
+  color: #f8fafc;
+}
+
+.profile-shell {
+  width: min(1080px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 28px 0 40px;
+}
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background:
+    linear-gradient(145deg, rgba(30, 27, 75, 0.86), rgba(15, 23, 42, 0.98)),
+    #111827;
+  border: 1px solid rgba(168, 85, 247, 0.26);
+  border-radius: 8px;
+  box-shadow:
+    0 0 28px rgba(168, 85, 247, 0.16),
+    0 16px 34px rgba(0, 0, 0, 0.26);
+}
+
+.profile-avatar {
+  display: grid;
+  place-items: center;
+  width: 72px;
+  height: 72px;
+  background: linear-gradient(145deg, #7c3aed, #0891b2);
+  border: 1px solid rgba(233, 213, 255, 0.72);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 1.85rem;
+  font-weight: 900;
+  box-shadow: 0 0 24px rgba(168, 85, 247, 0.42);
+}
+
+.profile-eyebrow,
+.profile-card-label,
+.profile-level-row span,
+.profile-xp-block span {
+  color: #d8b4fe;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.profile-hero h1 {
+  margin: 5px 0;
+  color: #ffffff;
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+.profile-hero p,
+.profile-card p,
+.profile-message,
+.profile-stat-list p {
+  color: #cbd5e1;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.7fr);
+  gap: 16px;
+}
+
+.profile-card {
+  padding: 18px;
+  background:
+    linear-gradient(145deg, rgba(30, 27, 75, 0.84), rgba(15, 23, 42, 0.96)),
+    #111827;
+  border: 1px solid rgba(168, 85, 247, 0.24);
+  border-radius: 8px;
+  box-shadow:
+    0 0 24px rgba(168, 85, 247, 0.14),
+    0 14px 30px rgba(0, 0, 0, 0.24);
+}
+
+.profile-main-card {
+  grid-row: span 2;
+}
+
+.profile-level-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.profile-level-row div {
+  padding: 14px;
+  background: rgba(8, 13, 30, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+}
+
+.profile-level-row strong {
+  display: block;
+  margin-top: 6px;
+  color: #ffffff;
+  font-size: 1.55rem;
+  line-height: 1;
+}
+
+.profile-xp-block {
+  margin-top: 18px;
+  padding: 16px;
+  background: rgba(8, 13, 30, 0.68);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+}
+
+.profile-xp-block > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.profile-xp-block strong,
+.profile-card h2 {
+  color: #ffffff;
+}
+
+.profile-xp-bar {
+  overflow: hidden;
+  height: 9px;
+  background: rgba(2, 6, 23, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 8px;
+}
+
+.profile-xp-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #a855f7, #22d3ee);
+  border-radius: inherit;
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.38);
+}
+
+.profile-card h2 {
+  margin: 8px 0;
+  font-size: 1.35rem;
+  letter-spacing: 0;
+}
+
+.achievement-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.achievement-list span {
+  padding: 8px 10px;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: 8px;
+  color: #bae6fd;
+  font-size: 0.86rem;
+  font-weight: 800;
+}
+
+.profile-stat-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.profile-stat-list p {
+  padding-left: 10px;
+  border-left: 3px solid #a855f7;
+}
+
+.profile-message {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: rgba(14, 165, 233, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.24);
+  border-radius: 8px;
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .profile-shell {
+    width: min(100% - 28px, 1080px);
+    padding-top: 20px;
+  }
+
+  .profile-hero,
+  .profile-grid,
+  .profile-level-row {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

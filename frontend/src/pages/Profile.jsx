@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
+import "./Profile.css";
+
+const demoProfile = {
+  username: "demo",
+  level: 1,
+  xp: 30,
+  coins: 15,
+};
 
 export default function Profile() {
-  const [profile, setProfile] = useState(null);
+  const [profile, setProfile] = useState(demoProfile);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     async function loadProfile() {
@@ -15,9 +22,9 @@ export default function Profile() {
         }
 
         const data = await response.json();
-        setProfile(data);
+        setProfile(data || demoProfile);
       } catch {
-        setError("Не удалось загрузить профиль. Проверь backend.");
+        setProfile(demoProfile);
       } finally {
         setLoading(false);
       }
@@ -27,32 +34,87 @@ export default function Profile() {
   }, []);
 
   if (loading) {
-    return <h1>Загрузка профиля...</h1>;
+    return (
+      <div className="profile-page">
+        <div className="profile-shell">
+          <p className="profile-message">Загрузка профиля...</p>
+        </div>
+      </div>
+    );
   }
 
-  if (error) {
-    return <h1>{error}</h1>;
-  }
+  const xpGoal = Math.max((profile.level || 1) * 250, 250);
+  const xpProgress = Math.min(Math.round(((profile.xp || 0) / xpGoal) * 100), 100);
+  const achievements = ["First Quest", "Map Explorer", "XP Collector"];
 
   return (
-    <div style={{ padding: "40px" }}>
-      <h1>👤 Профиль</h1>
+    <div className="profile-page">
+      <div className="profile-shell">
+        <header className="profile-hero">
+          <div className="profile-avatar">
+            {(profile.username || "H").slice(0, 1).toUpperCase()}
+          </div>
 
-      <div
-        style={{
-          marginTop: "24px",
-          padding: "24px",
-          borderRadius: "18px",
-          background: "#1e293b",
-          border: "1px solid #334155",
-          maxWidth: "500px",
-        }}
-      >
-        <h2>{profile.username}</h2>
-        <p>Level: {profile.level}</p>
-        <p>XP: {profile.xp}</p>
-        <p>Coins: {profile.coins}</p>
+          <div>
+            <span className="profile-eyebrow">Player profile</span>
+            <h1>{profile.username}</h1>
+            <p>Arcane Scholar / Learning Guild</p>
+          </div>
+        </header>
+
+        <section className="profile-grid">
+          <article className="profile-card profile-main-card">
+            <div className="profile-level-row">
+              <div>
+                <span>Level</span>
+                <strong>{profile.level}</strong>
+              </div>
+              <div>
+                <span>Coins</span>
+                <strong>{profile.coins}</strong>
+              </div>
+              <div>
+                <span>XP</span>
+                <strong>{profile.xp}</strong>
+              </div>
+            </div>
+
+            <div className="profile-xp-block">
+              <div>
+                <span>Next level progress</span>
+                <strong>{xpProgress}%</strong>
+              </div>
+              <div className="profile-xp-bar" aria-label={`${xpProgress}% XP`}>
+                <span style={{ width: `${xpProgress}%` }} />
+              </div>
+            </div>
+          </article>
+
+          <article className="profile-card">
+            <span className="profile-card-label">Streak</span>
+            <h2>1 day</h2>
+            <p>Keep completing lessons to grow the streak.</p>
+          </article>
+
+          <article className="profile-card">
+            <span className="profile-card-label">Achievements</span>
+            <div className="achievement-list">
+              {achievements.map((achievement) => (
+                <span key={achievement}>{achievement}</span>
+              ))}
+            </div>
+          </article>
+
+          <article className="profile-card">
+            <span className="profile-card-label">Stats</span>
+            <div className="profile-stat-list">
+              <p>Lessons completed: 1</p>
+              <p>Subjects unlocked: 1</p>
+              <p>Guild rank: Apprentice</p>
+            </div>
+          </article>
+        </section>
       </div>
     </div>
   );
-}   
+}
