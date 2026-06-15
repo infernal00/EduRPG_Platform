@@ -71,18 +71,20 @@ export default function Map() {
 
   if (loading) {
     return (
-      <div className="map-page">
-        <div className="map-shell">
+      <main className="map-page rpg-layout">
+        <DemoSidebar active="map" />
+        <section className="map-shell rpg-main">
           <h1>Мир знаний</h1>
           <p className="map-message">Загрузка карты...</p>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
   return (
-    <div className="map-page">
-      <div className="map-shell">
+    <main className="map-page rpg-layout">
+      <DemoSidebar active="map" />
+      <section className="map-shell rpg-main">
         <header className="map-hero">
           <div>
             <span className="map-eyebrow">Learning map</span>
@@ -191,7 +193,47 @@ export default function Map() {
             })}
           </div>
         )}
+      </section>
+    </main>
+  );
+}
+
+function DemoSidebar({ active }) {
+  return (
+    <aside className="rpg-sidebar">
+      <Link className="rpg-brand" to="/">
+        <span className="rpg-brand-mark">E</span>
+        <span>
+          <strong>EduRPG</strong>
+          <em>Academy hub</em>
+        </span>
+      </Link>
+
+      <nav className="rpg-nav" aria-label="Demo navigation">
+        <Link className={active === "home" ? "is-active" : ""} to="/">
+          Dashboard
+        </Link>
+        <Link className={active === "map" ? "is-active" : ""} to="/map">
+          Learning Map
+        </Link>
+        <Link className={active === "lesson" ? "is-active" : ""} to="/lessons/1">
+          Current Lesson
+        </Link>
+        <Link to="/duels">Duels</Link>
+        <Link to="/shop">Shop</Link>
+        <Link className={active === "profile" ? "is-active" : ""} to="/profile">
+          Profile
+        </Link>
+      </nav>
+
+      <div className="rpg-user-card">
+        <div className="rpg-user-avatar">d</div>
+        <strong>demo</strong>
+        <span>Level 1 / 30 XP</span>
+        <div className="rpg-mini-meter">
+          <span style={{ width: "12%" }} />
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }

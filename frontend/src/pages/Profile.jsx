@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./Profile.css";
 
 const demoProfile = {
@@ -22,7 +23,7 @@ export default function Profile() {
         }
 
         const data = await response.json();
-        setProfile(data || demoProfile);
+        setProfile({ ...demoProfile, ...(data || {}) });
       } catch {
         setProfile(demoProfile);
       } finally {
@@ -35,11 +36,12 @@ export default function Profile() {
 
   if (loading) {
     return (
-      <div className="profile-page">
-        <div className="profile-shell">
+      <main className="profile-page rpg-layout">
+        <DemoSidebar active="profile" />
+        <section className="profile-shell rpg-main">
           <p className="profile-message">Загрузка профиля...</p>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
@@ -48,8 +50,9 @@ export default function Profile() {
   const achievements = ["First Quest", "Map Explorer", "XP Collector"];
 
   return (
-    <div className="profile-page">
-      <div className="profile-shell">
+    <main className="profile-page rpg-layout">
+      <DemoSidebar active="profile" />
+      <section className="profile-shell rpg-main">
         <header className="profile-hero">
           <div className="profile-avatar">
             {(profile.username || "H").slice(0, 1).toUpperCase()}
@@ -114,7 +117,47 @@ export default function Profile() {
             </div>
           </article>
         </section>
+      </section>
+    </main>
+  );
+}
+
+function DemoSidebar({ active }) {
+  return (
+    <aside className="rpg-sidebar">
+      <Link className="rpg-brand" to="/">
+        <span className="rpg-brand-mark">E</span>
+        <span>
+          <strong>EduRPG</strong>
+          <em>Academy hub</em>
+        </span>
+      </Link>
+
+      <nav className="rpg-nav" aria-label="Demo navigation">
+        <Link className={active === "home" ? "is-active" : ""} to="/">
+          Dashboard
+        </Link>
+        <Link className={active === "map" ? "is-active" : ""} to="/map">
+          Learning Map
+        </Link>
+        <Link className={active === "lesson" ? "is-active" : ""} to="/lessons/1">
+          Current Lesson
+        </Link>
+        <Link to="/duels">Duels</Link>
+        <Link to="/shop">Shop</Link>
+        <Link className={active === "profile" ? "is-active" : ""} to="/profile">
+          Profile
+        </Link>
+      </nav>
+
+      <div className="rpg-user-card">
+        <div className="rpg-user-avatar">d</div>
+        <strong>demo</strong>
+        <span>Level 1 / 30 XP</span>
+        <div className="rpg-mini-meter">
+          <span style={{ width: "12%" }} />
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }

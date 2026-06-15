@@ -10,11 +10,15 @@ import Profile from "./pages/Profile";
 
 function AppShell() {
   const location = useLocation();
-  const isHomePage = location.pathname === "/";
+  const hasDemoShell =
+    location.pathname === "/" ||
+    location.pathname === "/map" ||
+    location.pathname === "/profile" ||
+    location.pathname.startsWith("/lessons/");
 
   return (
     <div className="app">
-      {!isHomePage && (
+      {!hasDemoShell && (
         <nav className="navbar">
           <h2>EduRPG</h2>
 

@@ -22,6 +22,9 @@ export default function Lesson() {
 
   const [completeResult, setCompleteResult] = useState(null);
   const [completing, setCompleting] = useState(false);
+  const lessonCompleted =
+    completeResult?.status === "completed" ||
+    completeResult?.status === "already_completed";
 
   useEffect(() => {
     async function loadLesson() {
@@ -33,7 +36,7 @@ export default function Lesson() {
         }
 
         const data = await response.json();
-        setLesson(data || demoLesson);
+        setLesson({ ...demoLesson, ...(data || {}) });
       } catch {
         setLesson(demoLesson);
       } finally {
@@ -45,6 +48,10 @@ export default function Lesson() {
   }, [id]);
 
   async function handleCompleteLesson() {
+    if (lessonCompleted || completing) {
+      return;
+    }
+
     setCompleting(true);
     setCompleteResult(null);
 
@@ -75,11 +82,12 @@ export default function Lesson() {
 
   if (loading) {
     return (
-      <div className="lesson-page">
-        <div className="lesson-shell">
+      <main className="lesson-page rpg-layout">
+        <DemoSidebar active="lesson" />
+        <section className="lesson-shell rpg-main">
           <p className="lesson-state">Загрузка урока...</p>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
@@ -89,8 +97,9 @@ export default function Lesson() {
   const lessonContent = lesson.content || demoLesson.content;
 
   return (
-    <div className="lesson-page">
-      <div className="lesson-shell">
+    <main className="lesson-page rpg-layout">
+      <DemoSidebar active="lesson" />
+      <section className="lesson-shell rpg-main">
         <Link className="back-link" to="/map">
           Назад к карте
         </Link>
@@ -170,15 +179,59 @@ export default function Lesson() {
             </div>
 
             <button
-              className="complete-button"
+              className={lessonCompleted ? "complete-button is-complete" : "complete-button"}
               onClick={handleCompleteLesson}
-              disabled={completing}
+              disabled={completing || lessonCompleted}
             >
-              {completing ? "Завершаем..." : "Завершить урок"}
+              {lessonCompleted
+                ? "Урок завершён"
+                : completing
+                  ? "Завершаем..."
+                  : "Завершить урок"}
             </button>
           </aside>
         </div>
+      </section>
+    </main>
+  );
+}
+
+function DemoSidebar({ active }) {
+  return (
+    <aside className="rpg-sidebar">
+      <Link className="rpg-brand" to="/">
+        <span className="rpg-brand-mark">E</span>
+        <span>
+          <strong>EduRPG</strong>
+          <em>Academy hub</em>
+        </span>
+      </Link>
+
+      <nav className="rpg-nav" aria-label="Demo navigation">
+        <Link className={active === "home" ? "is-active" : ""} to="/">
+          Dashboard
+        </Link>
+        <Link className={active === "map" ? "is-active" : ""} to="/map">
+          Learning Map
+        </Link>
+        <Link className={active === "lesson" ? "is-active" : ""} to="/lessons/1">
+          Current Lesson
+        </Link>
+        <Link to="/duels">Duels</Link>
+        <Link to="/shop">Shop</Link>
+        <Link className={active === "profile" ? "is-active" : ""} to="/profile">
+          Profile
+        </Link>
+      </nav>
+
+      <div className="rpg-user-card">
+        <div className="rpg-user-avatar">d</div>
+        <strong>demo</strong>
+        <span>Level 1 / 30 XP</span>
+        <div className="rpg-mini-meter">
+          <span style={{ width: "12%" }} />
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }

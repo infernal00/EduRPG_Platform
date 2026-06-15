@@ -6,10 +6,10 @@ const PROFILE_URL = "http://127.0.0.1:8000/api/profile/";
 const SUBJECTS_URL = "http://127.0.0.1:8000/api/subjects/";
 
 const demoProfile = {
-  username: "HeroStudent",
-  level: 8,
-  xp: 1280,
-  coins: 340,
+  username: "demo",
+  level: 1,
+  xp: 30,
+  coins: 15,
 };
 
 const demoSubjects = [
@@ -17,74 +17,29 @@ const demoSubjects = [
     id: 1,
     name: "Biology",
     icon: "biology",
+    description: "Explore genetics and discover how life stores information.",
     topics: [
       {
         id: 1,
         title: "Genetics",
         lessons: [{ id: 1, title: "What is DNA?", xp_reward: 30 }],
       },
-      {
-        id: 2,
-        title: "Cells",
-        lessons: [{ id: 2, title: "Inside the Cell", xp_reward: 35 }],
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Math",
-    icon: "math",
-    topics: [
-      {
-        id: 3,
-        title: "Algebra",
-        lessons: [{ id: 3, title: "Linear Equations", xp_reward: 25 }],
-      },
-      {
-        id: 4,
-        title: "Functions",
-        lessons: [{ id: 4, title: "Graph Basics", xp_reward: 35 }],
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Programming",
-    icon: "programming",
-    topics: [
-      {
-        id: 5,
-        title: "JavaScript",
-        lessons: [{ id: 5, title: "Variables and Values", xp_reward: 40 }],
-      },
-    ],
-  },
-  {
-    id: 4,
-    name: "Physics",
-    icon: "physics",
-    topics: [
-      {
-        id: 6,
-        title: "Motion",
-        lessons: [{ id: 6, title: "Speed and Force", xp_reward: 45 }],
-      },
     ],
   },
 ];
 
 const subjectThemes = {
-  biology: { shortName: "BIO", accent: "#34d399", soft: "rgba(52, 211, 153, 0.16)" },
-  math: { shortName: "MTH", accent: "#facc15", soft: "rgba(250, 204, 21, 0.15)" },
-  physics: { shortName: "PHY", accent: "#38bdf8", soft: "rgba(56, 189, 248, 0.16)" },
-  programming: { shortName: "DEV", accent: "#a78bfa", soft: "rgba(167, 139, 250, 0.18)" },
-  english: { shortName: "ENG", accent: "#fb7185", soft: "rgba(251, 113, 133, 0.15)" },
+  biology: { shortName: "BIO", accent: "#3EC98E", soft: "rgba(62, 201, 142, 0.16)" },
+  math: { shortName: "MTH", accent: "#F5A623", soft: "rgba(245, 166, 35, 0.16)" },
+  physics: { shortName: "PHY", accent: "#4FA3E3", soft: "rgba(79, 163, 227, 0.16)" },
+  programming: { shortName: "DEV", accent: "#7B6EF6", soft: "rgba(123, 110, 246, 0.18)" },
+  english: { shortName: "ENG", accent: "#F5A623", soft: "rgba(245, 166, 35, 0.14)" },
 };
 
 const fallbackThemes = [
-  { shortName: "SUB", accent: "#a78bfa", soft: "rgba(167, 139, 250, 0.18)" },
-  { shortName: "QST", accent: "#22d3ee", soft: "rgba(34, 211, 238, 0.16)" },
-  { shortName: "ARC", accent: "#f59e0b", soft: "rgba(245, 158, 11, 0.14)" },
+  { shortName: "SUB", accent: "#7B6EF6", soft: "rgba(123, 110, 246, 0.18)" },
+  { shortName: "QST", accent: "#4FA3E3", soft: "rgba(79, 163, 227, 0.16)" },
+  { shortName: "ARC", accent: "#F5A623", soft: "rgba(245, 166, 35, 0.14)" },
 ];
 
 const dailyQuests = [
@@ -167,7 +122,6 @@ export default function Home() {
   const [profile, setProfile] = useState(demoProfile);
   const [subjects, setSubjects] = useState(demoSubjects);
   const [loading, setLoading] = useState(true);
-  const [usingDemoData, setUsingDemoData] = useState(false);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -178,9 +132,7 @@ export default function Home() {
         ]);
 
         if (profileResult.status === "fulfilled") {
-          setProfile(profileResult.value || demoProfile);
-        } else {
-          setUsingDemoData(true);
+          setProfile({ ...demoProfile, ...(profileResult.value || {}) });
         }
 
         if (
@@ -189,8 +141,6 @@ export default function Home() {
           subjectsResult.value.length > 0
         ) {
           setSubjects(subjectsResult.value);
-        } else {
-          setUsingDemoData(true);
         }
       } finally {
         setLoading(false);
@@ -229,7 +179,6 @@ export default function Home() {
 
   const recommendedLesson = getFirstLesson(subjects);
   const profileName = player.username || "Adventurer";
-  const profileInitial = profileName.slice(0, 1).toUpperCase();
   const completedQuests = dailyQuests.filter((quest) => quest.done).length;
   const leaderboard = [
     { name: profileName, level: player.level || 1, rank: 1, score: "2,840 XP" },
@@ -253,16 +202,18 @@ export default function Home() {
             Dashboard
           </Link>
           <Link to="/map">Learning map</Link>
-          <Link to={`/lessons/${recommendedLesson.id}`}>Current lesson</Link>
-          <Link to="/profile">Hero profile</Link>
+          <Link to="/lessons/1">Current lesson</Link>
+          <Link to="/duels">Duels</Link>
+          <Link to="/shop">Shop</Link>
+          <Link to="/profile">Profile</Link>
         </nav>
 
         <div className="sidebar-player">
-          <div className="sidebar-avatar">{profileInitial}</div>
-          <strong>{profileName}</strong>
-          <span>{player.title}</span>
+          <div className="sidebar-avatar">d</div>
+          <strong>demo</strong>
+          <span>Level 1 / 30 XP</span>
           <div className="sidebar-meter">
-            <span style={{ width: `${dashboardStats.xpProgress}%` }} />
+            <span style={{ width: "12%" }} />
           </div>
         </div>
       </aside>
@@ -298,12 +249,7 @@ export default function Home() {
           </div>
         </header>
 
-        {loading && <p className="dashboard-note">Loading live academy data...</p>}
-        {usingDemoData && !loading && (
-          <p className="dashboard-note">
-            Demo data is active while the local API has missing dashboard data.
-          </p>
-        )}
+        {loading && <p className="dashboard-note">Preparing academy dashboard...</p>}
 
         <section className="dashboard-grid">
           <section className="dashboard-main-column">
