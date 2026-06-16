@@ -82,22 +82,24 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # ─── CORS ────────────────────────────────────────────────────────────────────
 CORS_ALLOW_ALL_ORIGINS = True
 
-# ─── DRF + JWT ───────────────────────────────────────────────────────────────
+# Настройки DRF
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    )
 }
 
+# Настройки SimpleJWT
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
-    'ROTATE_REFRESH_TOKENS': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),     # Сколько живет токен доступа
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),        # Сколько живет токен для обновления
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,                          # Использует секретный ключ вашего проекта
+    'AUTH_HEADER_TYPES': ('Bearer',),                   # Заголовок будет вида: Authorization: Bearer <token>
 }
-
 # ─── RPG настройки ───────────────────────────────────────────────────────────
 RPG_BASE_XP_PER_LEVEL = 100
 RPG_XP_MULTIPLIER = 1.5
