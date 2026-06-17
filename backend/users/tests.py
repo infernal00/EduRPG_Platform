@@ -5,8 +5,8 @@ from django.urls import reverse
 from django.utils import timezone
 from rest_framework.test import APITestCase
 
-from courses.models import Lesson, LessonCompletion
-from users.models import Achievement, UserAchievement
+from courses.models import Course, Lesson, LessonCompletion
+from users.models import Achievement, UserAchievement, UserProfile
 
 
 class GamificationAPITests(APITestCase):
@@ -16,7 +16,65 @@ class GamificationAPITests(APITestCase):
             password="pass12345",
         )
         self.client.force_authenticate(self.user)
-        self.lesson = Lesson.objects.create(title="Intro", reward_points=40)
+        self.course = Course.objects.create(title="Intro Course", slug="intro-course", order=1)
+        self.lesson = Lesson.objects.create(
+            course=self.course,
+            title="Intro",
+            slug="intro",
+            reward_points=40,
+        )
+
+    def test_register_creates_user_and_profile(self):
+        self.client.force_authenticate(user=None)
+
+        response = self.client.post(
+            reverse("register"),
+            {"username": "newcomer", "password": "pass12345"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data["username"], "newcomer")
+        user = get_user_model().objects.get(username="newcomer")
+        self.assertTrue(UserProfile.objects.filter(user=user).exists())
+
+    def test_register_rejects_duplicate_username(self):
+        self.client.force_authenticate(user=None)
+
+        response = self.client.post(
+            reverse("register"),
+            {"username": "learner", "password": "pass12345"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("username", response.data)
+
+    def test_registered_user_can_get_token_and_current_user(self):
+        self.client.force_authenticate(user=None)
+        self.client.post(
+            reverse("register"),
+            {"username": "token_user", "password": "pass12345"},
+            format="json",
+        )
+
+        token_response = self.client.post(
+            reverse("token_obtain_pair"),
+            {"username": "token_user", "password": "pass12345"},
+            format="json",
+        )
+        self.assertEqual(token_response.status_code, 200)
+
+        response = self.client.get(
+            reverse("current-user"),
+            HTTP_AUTHORIZATION=f"Bearer {token_response.data['access']}",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["username"], "token_user")
+        self.assertEqual(response.data["points"], 0)
+        self.assertIn("achievements", response.data)
+        self.assertIn("progress", response.data)
 
     def test_achievements_endpoint_returns_data(self):
         response = self.client.get(reverse("achievements"))
@@ -107,7 +165,12 @@ class GamificationAPITests(APITestCase):
         self.assertEqual(profile.streak, 1)
 
     def test_multiple_lessons_on_same_day_do_not_increase_streak_twice(self):
-        second_lesson = Lesson.objects.create(title="Follow up", reward_points=30)
+        second_lesson = Lesson.objects.create(
+            course=self.course,
+            title="Follow up",
+            slug="follow-up",
+            reward_points=30,
+        )
 
         first_response = self.client.post(reverse("lesson-complete", args=[self.lesson.id]))
         second_response = self.client.post(reverse("lesson-complete", args=[second_lesson.id]))
@@ -175,3 +238,17 @@ class GamificationAPITests(APITestCase):
         self.assertEqual(achievements_response.status_code, 200)
         self.assertTrue(achievements_response.data)
         self.assertTrue(all(not item["unlocked"] for item in achievements_response.data))
+
+    def test_current_user_updates_after_lesson_completion(self):
+        complete_response = self.client.post(reverse("lesson-complete", args=[self.lesson.id]))
+
+        self.assertEqual(complete_response.status_code, 201)
+
+        response = self.client.get(reverse("current-user"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data["points"], 40)
+        self.assertEqual(response.data["streak"], 1)
+        self.assertEqual(response.data["progress"]["completed_lessons"], 1)
+        self.assertTrue(response.data["progress"]["completed_any_lessons"])
+        self.assertEqual(response.data["achievements"]["unlocked"], 1)
