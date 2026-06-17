@@ -22,11 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Зависимости фронтенда (самая тяжелая каша)
-node_modules/
-dist/
-
-# Локальные логи ошибок
-*.log
-.eslintcache

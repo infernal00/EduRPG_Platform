@@ -1,0 +1,154 @@
+.duels-page {
+  --bg: #0D0B1E;
+  --card: #1A1640;
+  --border: #2E2860;
+  --purple: #7B6EF6;
+  --cyan: #4FA3E3;
+  --gold: #F5A623;
+  --text: #EDEAF8;
+  --muted: #8E8AAD;
+  min-height: calc(100vh - 84px);
+  background:
+    radial-gradient(circle at 18% 0%, rgba(123, 110, 246, 0.2), transparent 30%),
+    radial-gradient(circle at 100% 12%, rgba(79, 163, 227, 0.14), transparent 28%),
+    var(--bg);
+  color: var(--text);
+}
+
+.duels-shell {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 26px 0 38px;
+}
+
+.duels-hero {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.duels-eyebrow,
+.duels-badge,
+.duels-stats span,
+.duel-mode-card span {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.duels-hero h1 {
+  margin: 6px 0 8px;
+  color: var(--text);
+  font-size: clamp(1.8rem, 3vw, 2.25rem);
+  letter-spacing: 0;
+}
+
+.duels-hero p,
+.duels-feature-card p,
+.duel-mode-card p {
+  color: var(--muted);
+}
+
+.duels-stats,
+.duels-feature-card,
+.duel-mode-card {
+  background: rgba(26, 22, 64, 0.82);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.26);
+}
+
+.duels-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(78px, 1fr));
+  gap: 10px;
+  min-width: 320px;
+  padding: 12px;
+}
+
+.duels-stats div {
+  padding: 10px;
+  background: rgba(13, 11, 30, 0.42);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+
+.duels-stats strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--text);
+  font-size: 1.25rem;
+}
+
+.duels-feature-card {
+  padding: 20px;
+  margin-bottom: 16px;
+  background:
+    linear-gradient(135deg, rgba(123, 110, 246, 0.28), rgba(79, 163, 227, 0.16)),
+    var(--card);
+}
+
+.duels-feature-card h2 {
+  margin: 10px 0 8px;
+  color: var(--text);
+  font-size: 1.45rem;
+  letter-spacing: 0;
+}
+
+.duels-badge {
+  display: inline-flex;
+  padding: 6px 10px;
+  color: var(--gold);
+  background: rgba(245, 166, 35, 0.12);
+  border: 1px solid rgba(245, 166, 35, 0.34);
+  border-radius: 999px;
+}
+
+.duel-mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.duel-mode-card {
+  padding: 16px;
+}
+
+.duel-mode-card h3 {
+  margin: 10px 0 8px;
+  color: var(--text);
+  font-size: 1.1rem;
+}
+
+.duel-mode-card button {
+  width: 100%;
+  margin-top: 14px;
+  padding: 10px 12px;
+  color: var(--muted);
+  background: rgba(13, 11, 30, 0.62);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  cursor: not-allowed;
+  font-weight: 800;
+}
+
+@media (max-width: 820px) {
+  .duels-shell {
+    width: min(100% - 28px, 1120px);
+    padding-top: 20px;
+  }
+
+  .duels-hero {
+    flex-direction: column;
+  }
+
+  .duels-stats,
+  .duel-mode-grid {
+    grid-template-columns: 1fr;
+    min-width: 0;
+  }
+}
