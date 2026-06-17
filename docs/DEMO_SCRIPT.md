@@ -1,42 +1,61 @@
-# Demo Script
+# Demo Script 
 
-## 60-90 Second Presentation
+## Project Introduction
 
-“EduRPG is a learning platform MVP that turns study progress into an RPG-style quest flow. The goal is to make lessons feel more motivating by combining subjects, topics, rewards, and profile progression.”
+EduRPG Platform is an MVP educational platform that combines learning with RPG-style progression mechanics. Users complete lessons, earn rewards, gain experience points, and track their progress through a game-inspired interface.
 
-## Click Flow
+## Demonstration Flow
 
-1. Start on the Home dashboard.
-   - Say: “This is the main learner dashboard. It shows player stats, current lesson, daily quests, recent activity, and subject progress.”
+### Home Dashboard
 
-2. Click `Learning Map`.
-   - Say: “The learning map organizes content by subject and topic. In the MVP, Biology contains the Genetics topic and the lesson `What is DNA?`.”
+Start from the Home page.
 
-3. Click `What is DNA?` or `Start route`.
-   - Say: “The lesson page presents the content as a quest. The user can see the subject, topic, level, XP reward, and coin reward.”
+Explain:
 
-4. Click `Complete lesson`.
-   - Say: “Completing a lesson awards XP and coins. The backend prevents repeatedly farming the same lesson.”
+"The Home Dashboard provides an overview of the learner’s progress, including current level, earned XP, coins, active quests, recent activity, and subject progression."
 
-5. Click `Profile`.
-   - Say: “The profile shows the demo learner’s level, XP, coins, achievements, streak, and rank-style stats.”
+### Learning Map
 
-6. Click `Duels` and `Shop`.
-   - Say: “These are planned modules. Duels will support battle-based quiz learning, and Shop will let users spend coins on boosts or cosmetics.”
+Open the Learning Map page.
 
-## If Backend Is Not Running
+Explain:
 
-Say:
+"The Learning Map organizes educational content into subjects, topics, and lessons. In this MVP version, the demonstration path consists of Biology → Genetics → What is DNA?."
 
-“For demo stability, the frontend includes polished fallback data. The visual flow still works, but live reward persistence and database-backed content require the Django backend to be running.”
+### Lesson Page
 
-Then continue showing:
+Open the lesson "What is DNA?".
 
-- Home dashboard
-- Learning Map
-- Lesson page
-- Profile fallback stats
+Explain:
 
-## Planned Modules Talking Point
+"Each lesson is presented as a quest. The learner can view the lesson content, difficulty level, and the rewards that will be received upon completion."
 
-“Duels and Shop are intentionally shown as planned modules. They demonstrate the product direction beyond the MVP without pretending the full systems are already implemented.”
+### Lesson Completion
+
+Click Complete Lesson.
+
+Explain:
+
+"After completing a lesson, the learner receives XP and coins. The backend tracks completed lessons and prevents duplicate reward collection."
+
+### Profile Page
+
+Open the Profile page.
+
+Explain:
+
+"The profile displays learner statistics including level, XP, coins, achievements, streak information, and overall progression."
+
+### Planned Modules
+
+Briefly open Duels and Shop.
+
+Explain:
+
+"These modules are currently planned for future development. Duels will provide quiz-based competitive learning, while Shop will allow users to spend earned coins on upgrades and cosmetic items."
+
+## Backend Fallback Scenario
+
+If the backend is unavailable:
+
+"The frontend contains fallback demo data to ensure a smooth presentation experience. Core navigation remains functional, while persistent progress and live data require the backend service."
