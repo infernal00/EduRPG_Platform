@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from django.shortcuts import get_object_or_404
 
 from rest_framework.decorators import api_view, permission_classes
@@ -72,47 +73,49 @@ def lesson_detail(request, pk):
 def complete_lesson(request, pk):
     lesson = get_object_or_404(Lesson, pk=pk, is_active=True)
     user = get_demo_or_request_user(request)
-    profile, _ = UserProfile.objects.get_or_create(user=user)
-    progress, _ = LessonProgress.objects.get_or_create(
-        user=user,
-        lesson=lesson,
-        defaults={"is_completed": False},
-    )
 
-    if progress.is_completed:
+    with transaction.atomic():
+        profile, _ = UserProfile.objects.select_for_update().get_or_create(user=user)
+        progress, _ = LessonProgress.objects.select_for_update().get_or_create(
+            user=user,
+            lesson=lesson,
+            defaults={"is_completed": False},
+        )
+
+        if progress.is_completed:
+            return Response(
+                {
+                    "completed": True,
+                    "already_completed": True,
+                    "xp_earned": 0,
+                    "coins_earned": 0,
+                    "total_xp": profile.xp,
+                    "total_coins": profile.coins,
+                    "level": profile.level,
+                    "status": "already_completed",
+                    "lesson_id": lesson.id,
+                    "lesson_title": lesson.title,
+                    "xp_gained": 0,
+                    "coins_gained": 0,
+                },
+            )
+
+        progress.complete()
+        profile.add_rewards(lesson.xp_reward, lesson.coins_reward)
+
         return Response(
             {
                 "completed": True,
-                "already_completed": True,
-                "xp_earned": 0,
-                "coins_earned": 0,
+                "already_completed": False,
+                "xp_earned": lesson.xp_reward,
+                "coins_earned": lesson.coins_reward,
                 "total_xp": profile.xp,
                 "total_coins": profile.coins,
                 "level": profile.level,
-                "status": "already_completed",
+                "status": "completed",
                 "lesson_id": lesson.id,
                 "lesson_title": lesson.title,
-                "xp_gained": 0,
-                "coins_gained": 0,
+                "xp_gained": lesson.xp_reward,
+                "coins_gained": lesson.coins_reward,
             },
         )
-
-    progress.complete()
-    profile.add_rewards(lesson.xp_reward, lesson.coins_reward)
-
-    return Response(
-        {
-            "completed": True,
-            "already_completed": False,
-            "xp_earned": lesson.xp_reward,
-            "coins_earned": lesson.coins_reward,
-            "total_xp": profile.xp,
-            "total_coins": profile.coins,
-            "level": profile.level,
-            "status": "completed",
-            "lesson_id": lesson.id,
-            "lesson_title": lesson.title,
-            "xp_gained": lesson.xp_reward,
-            "coins_gained": lesson.coins_reward,
-        },
-    )
