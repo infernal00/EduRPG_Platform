@@ -29,44 +29,27 @@ class RegisterSerializer(serializers.ModelSerializer):
             email=validated_data['email'],
             password=validated_data['password'],
         )
-        user.xp_to_next_level = user.xp_to_reach_level(1)
-        user.save()
         return user
 
 
 # ─── User ─────────────────────────────────────────────────────────────────────
 
-class UserStatsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            'level', 'xp', 'xp_to_next_level', 'coins', 'total_xp_earned',
-            'lessons_completed', 'tests_completed', 'battles_won',
-            'battles_played', 'streak_days',
-        )
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
-    stats = serializers.SerializerMethodField()
-
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'avatar_url', 'is_active', 'date_joined', 'stats')
-
-    def get_stats(self, obj):
-        return UserStatsSerializer(obj).data
+        fields = ('id', 'username', 'email', 'is_active', 'date_joined')
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'avatar_url', 'level', 'xp')
+        fields = ('id', 'username', 'level', 'xp')
 
 
 class UserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'avatar_url')
+        fields = ('username')
 
 
 # ─── Category ─────────────────────────────────────────────────────────────────
@@ -225,4 +208,4 @@ class UserAchievementSerializer(serializers.ModelSerializer):
 class LeaderboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'avatar_url', 'level', 'total_xp_earned', 'battles_won')
+        fields = ('id', 'username', 'level', 'total_xp_earned', 'battles_won')

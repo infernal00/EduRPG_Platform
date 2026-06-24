@@ -21,6 +21,9 @@ class User(AbstractUser):
     streak_days = models.PositiveIntegerField(default=0)
     last_activity = models.DateTimeField(null=True, blank=True)
 
+    groups = models.ManyToManyField('auth.Group', related_name='core_user_set', blank=True)
+    user_permissions = models.ManyToManyField('auth.Permission', related_name='core_user_permissions_set', blank=True)
+
     class Meta:
         db_table = 'users'
 

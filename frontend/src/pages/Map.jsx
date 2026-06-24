@@ -1,42 +1,45 @@
-import "./Map.css";
+﻿import { useEffect, useState } from 'react'
+import api from '../api'
+import './Map.css'
 
 export default function Map() {
-  const locations = [
-    {
-      name: "🏝️ Остров Арифметики",
-      description: "Основы математики и вычислений"
-    },
-    {
-      name: "🏰 Башня Алгебры",
-      description: "Уравнения и формулы"
-    },
-    {
-      name: "🌲 Лес Геометрии",
-      description: "Фигуры и пространство"
-    },
-    {
-      name: "⚡ Лаборатория Физики",
-      description: "Законы природы"
-    },
-    {
-      name: "💻 Долина Программирования",
-      description: "Python, Java, Web"
-    }
-  ];
+  const [lessons, setLessons] = useState([])
+  const [progress, setProgress] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    Promise.all([
+      api.get('/lessons/'),
+      api.get('/lessons/progress/').catch(() => ({ data: [] })),
+    ]).then(([l, p]) => {
+      setLessons(l.data)
+      setProgress(p.data)
+    }).finally(() => setLoading(false))
+  }, [])
+
+  const completedIds = new Set(progress.filter(p => p.completed).map(p => p.lesson))
+
+  if (loading) return <div className="page-loading">Загрузка карты...</div>
 
   return (
     <div className="map-page">
-      <h1>🗺️ Мир знаний</h1>
-
+      <h1>Мир знаний</h1>
       <div className="map-grid">
-        {locations.map((location) => (
-          <div className="location-card" key={location.name}>
-            <h3>{location.name}</h3>
-            <p>{location.description}</p>
-            <button>Войти</button>
-          </div>
-        ))}
+        {lessons.length === 0
+          ? <p className="muted">Уроков нет. Добавь через админку!</p>
+          : lessons.map(l => (
+              <div className={`location-card ${completedIds.has(l.id) ? 'completed' : ''}`} key={l.id}>
+                {completedIds.has(l.id) && <span className="done-badge">Пройден</span>}
+                <h3>{l.title}</h3>
+                <p>{l.description?.slice(0, 80) ?? 'Без описания'}</p>
+                <div className="card-footer">
+                  <span className="badge">+{l.xp_reward ?? 30} XP</span>
+                  <button onClick={() => alert(l.title)}>Войти</button>
+                </div>
+              </div>
+            ))
+        }
       </div>
     </div>
-  );
+  )
 }

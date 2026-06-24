@@ -1,4 +1,5 @@
-
+﻿with open('frontend/src/App.css', 'w', encoding='utf-8') as f:
+    f.write("""
 /* ===== RESET & BASE ===== */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
@@ -356,3 +357,5 @@ body {
 }
 .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
 .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+""")
+print('OK')
